@@ -1,0 +1,155 @@
+.env.example
+  s_54214098f207e0::t_4b3e5be9dfa3e4 1-29
+.gitattributes
+  s_54214098f207e0::t_9d5ad353b0ebe3 1-3
+.github/workflows/ci.yml
+  s_54214098f207e0::t_d52c14658a07d9 1-86
+.gitignore
+  s_54214098f207e0::t_8ff0597beeb4d6 1-35
+LICENSE
+  s_54214098f207e0::t_ba554c43ba097d 1-21
+README.md
+  s_54214098f207e0::t_bc91a80207f27e 1-219
+data/logs/2026-10-30.csv
+  s_54214098f207e0::t_5606f7b2047ab4 1-1496
+data/logs/2026-10-31.csv
+  s_54214098f207e0::t_0a4c4f53283c2b 1-895
+data/logs/2026-11-01.csv
+  s_54214098f207e0::t_129c5087613fbb 1-908
+data/logs/2026-11-02.csv
+  s_54214098f207e0::t_9f1cfbcedbf567 1-1496
+data/logs/2026-11-03.csv
+  s_54214098f207e0::t_94a4c7f9578b01 1-1432
+data/logs/2026-11-04.csv
+  s_54214098f207e0::t_c0179061f94aad 1-1484
+data/logs/2026-11-05.csv
+  s_54214098f207e0::t_acb1b63e3e452e 1-1532
+data/logs/2026-11-06.csv
+  s_54214098f207e0::t_857fbe66e1194c 1-1493
+data/logs/2026-11-07.csv
+  s_54214098f207e0::t_4998486b7e8549 1-881
+docker-compose.yml
+  s_54214098f207e0::t_6dabb14b4005c9 1-89
+docs/sample-report-2026-11-04.html
+  s_54214098f207e0::t_7bbea281db531e 1-147
+n8n/init/bootstrap.sh
+  s_54214098f207e0::t_c5064e7c6607dd 1-16
+n8n/init/render-credentials.js
+  s_54214098f207e0::t_4a36b06a58c040 1-44
+n8n/workflows/daily-report.json
+  s_54214098f207e0::t_37ed480c0c99c2 1-191
+n8n/workflows/error-alert.json
+  s_54214098f207e0::t_81cdf67b573917 1-100
+scripts/backfill.sh
+  s_54214098f207e0::t_405639af64ec64 1-19
+scripts/e2e.sh
+  s_54214098f207e0::t_1bc0eade72f8a9 1-41
+service/Dockerfile
+  s_54214098f207e0::t_56d331250fc55f 1-25
+service/README.md
+  s_54214098f207e0::t_e40c407f916a7f 1-5
+service/alembic.ini
+  s_54214098f207e0::t_78af812c91c134 1-37
+service/migrations/env.py
+  s_54214098f207e0::t_0b010de20500d7 1-46
+service/migrations/script.py.mako
+  s_54214098f207e0::t_204600aba150ed 1-25
+service/migrations/versions/20261108_0001_create_report_tables.py
+  s_54214098f207e0::t_af07248bdbe225 1-74
+service/prompts/CHANGELOG.md
+  s_54214098f207e0::t_cf6e64047a7acd 1-20
+service/prompts/daily-report/v1.md
+  s_54214098f207e0::t_bd0f30c0ee921e 1-37
+service/pyproject.toml
+  s_54214098f207e0::t_72a5fd088bd573 1-52
+service/scripts/generate_sample_logs.py
+  s_54214098f207e0::t_551e99be358203 1-172
+service/src/report_engine/__init__.py
+  s_54214098f207e0::t_84a67e0a702763 1-3
+service/src/report_engine/api/dependencies.py
+  s_54214098f207e0::t_c33793c55eccf7 1-39
+service/src/report_engine/api/main.py
+  s_54214098f207e0::t_f1e21d1ce25ae2 1-107
+service/src/report_engine/api/problems.py
+  s_54214098f207e0::t_eb46ebad0ea4b2 1-65
+service/src/report_engine/api/routes.py
+  s_54214098f207e0::t_52b192e99201ea 1-166
+service/src/report_engine/api/schemas.py
+  s_54214098f207e0::t_146baadadb54a4 1-184
+service/src/report_engine/application/ports.py
+  s_54214098f207e0::t_2448921a4f3377 1-101
+service/src/report_engine/application/use_cases.py
+  s_54214098f207e0::t_c690774212a1de 1-305
+service/src/report_engine/domain/anomalies.py
+  s_54214098f207e0::t_1f97308e8dbeb3 1-186
+service/src/report_engine/domain/enums.py
+  s_54214098f207e0::t_a193fe42f6b701 1-46
+service/src/report_engine/domain/errors.py
+  s_54214098f207e0::t_f688fa9f54f1ed 1-23
+service/src/report_engine/domain/logs.py
+  s_54214098f207e0::t_61341cb40736d7 1-36
+service/src/report_engine/domain/masking.py
+  s_54214098f207e0::t_b08876d3925c9a 1-46
+service/src/report_engine/domain/metrics.py
+  s_54214098f207e0::t_48b668a650a640 1-127
+service/src/report_engine/domain/report.py
+  s_54214098f207e0::t_7d04a061ffc5e1 1-200
+service/src/report_engine/domain/result.py
+  s_54214098f207e0::t_5bf2432a095720 1-24
+service/src/report_engine/infrastructure/claude_summary.py
+  s_54214098f207e0::t_55f4023b3e311a 1-193
+service/src/report_engine/infrastructure/container.py
+  s_54214098f207e0::t_40869be543d570 1-90
+service/src/report_engine/infrastructure/csv_log_source.py
+  s_54214098f207e0::t_c3e43df6134d33 1-78
+service/src/report_engine/infrastructure/i18n.py
+  s_54214098f207e0::t_27dbec2b0c0259 1-48
+service/src/report_engine/infrastructure/logging.py
+  s_54214098f207e0::t_c893d852268726 1-48
+service/src/report_engine/infrastructure/persistence/database.py
+  s_54214098f207e0::t_0cb13f2a257b27 1-15
+service/src/report_engine/infrastructure/persistence/orm.py
+  s_54214098f207e0::t_f37f7b949ff876 1-64
+service/src/report_engine/infrastructure/persistence/repository.py
+  s_54214098f207e0::t_89d259faa2f066 1-270
+service/src/report_engine/infrastructure/prompts.py
+  s_54214098f207e0::t_4c16d66ed076df 1-39
+service/src/report_engine/infrastructure/reporting.py
+  s_54214098f207e0::t_16e7e7f5c951ef 1-221
+service/src/report_engine/infrastructure/settings.py
+  s_54214098f207e0::t_8baffddbf58640 1-82
+service/src/report_engine/locales/en.json
+  s_54214098f207e0::t_502e69cac77cc4 1-73
+service/src/report_engine/locales/pt-BR.json
+  s_54214098f207e0::t_41f707c979e993 1-73
+service/src/report_engine/templates/report.html
+  s_54214098f207e0::t_5d654731c1408e 1-118
+service/tests/conftest.py
+  s_54214098f207e0::t_934c0e52e8a47d 1-101
+service/tests/integration/test_api.py
+  s_54214098f207e0::t_4838a09ab59ba3 1-185
+service/tests/integration/test_n8n_workflows.py
+  s_54214098f207e0::t_c443ba916f545c 1-106
+service/tests/unit/test_domain.py
+  s_54214098f207e0::t_f9428147d80c5b 1-223
+service/tests/unit/test_infrastructure.py
+  s_54214098f207e0::t_17ec348a319eb3 1-242
+service/tests/unit/test_use_cases.py
+  s_54214098f207e0::t_383250cc768474 1-202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1c2d695cc98f0f03f69b5fece5d8e82127350392",
+  "prompts": {},
+  "sessions": {
+    "s_54214098f207e0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "94211bd0-6b9d-4bb9-b402-a4345a77b8fc",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Giulia Castro <castro.giuliab@gmail.com>"
+    }
+  }
+}
