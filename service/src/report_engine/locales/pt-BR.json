@@ -1,0 +1,73 @@
+{
+  "errors": {
+    "VALIDATION_FAILED": {"title": "Dados inválidos", "detail": "Um ou mais campos não passaram na validação."},
+    "UNAUTHORIZED": {"title": "Não autenticado", "detail": "Informe uma chave de API válida no cabeçalho X-API-Key."},
+    "RESOURCE_NOT_FOUND": {"title": "Recurso não encontrado", "detail": "A rota solicitada não existe."},
+    "INTERNAL_ERROR": {"title": "Erro interno", "detail": "Ocorreu um erro inesperado. Informe o correlationId ao suporte."},
+    "REPORT_DATE_IN_FUTURE": {"title": "Data no futuro", "detail": "Não é possível gerar o relatório de {reportDate}, que ainda não aconteceu."},
+    "NO_LOG_DATA": {"title": "Sem dados de log", "detail": "Não há eventos de log para {reportDate}."},
+    "REPORT_NOT_FOUND": {"title": "Relatório não encontrado", "detail": "O relatório {id} não existe."},
+    "REPORT_ALREADY_DELIVERED": {"title": "Relatório já entregue", "detail": "O relatório de {reportDate} já foi enviado e não pode ser alterado."},
+    "REPORT_NOT_SUMMARIZED": {"title": "Relatório sem resumo", "detail": "O relatório {id} precisa do resumo antes de ser marcado como entregue."},
+    "REPORT_VERSION_CONFLICT": {"title": "Conflito de versão", "detail": "O relatório foi alterado por outra execução (versão enviada {expected}, atual {current})."},
+    "FAILURE_WORKFLOW_REQUIRED": {"title": "Workflow obrigatório", "detail": "Informe o nome do workflow que falhou."}
+  },
+  "report": {
+    "subject": "[{health}] {product}: relatório diário de operações de {date}",
+    "title": "Relatório diário de operações",
+    "health": {"GREEN": "Saudável", "YELLOW": "Atenção", "RED": "Crítico"},
+    "summary": "Resumo executivo",
+    "highlights": "Destaques",
+    "risks": "Riscos",
+    "actions": "Ações recomendadas",
+    "kpis": "Indicadores do dia",
+    "requests": "Requisições",
+    "errorRate": "Taxa de erro (5xx)",
+    "p95": "Latência p95",
+    "affectedUsers": "Usuários afetados por erro",
+    "anomalies": "Alertas",
+    "noAnomalies": "Nenhum alerta: todos os indicadores dentro do SLO.",
+    "services": "Por serviço",
+    "service": "Serviço",
+    "topErrors": "Erros mais frequentes",
+    "occurrences": "Ocorrências",
+    "error": "Erro",
+    "level": {"WARNING": "Aviso", "CRITICAL": "Crítico"},
+    "allServices": "todos os serviços",
+    "rejected": "{count} linha(s) de log inválida(s) foram ignoradas.",
+    "footerAi": "Resumo escrito por IA ({model}) a partir de métricas calculadas e mascaradas. Custo: US$ {cost}.",
+    "footerFallback": "Resumo gerado por regras porque o modelo de IA não respondeu. Os números e alertas não mudam.",
+    "footer": "Gerado automaticamente pelo pipeline ops-report-automation. Dados pessoais são mascarados antes do envio."
+  },
+  "anomalies": {
+    "ERROR_RATE_SLO": "Taxa de erro de {observed} em {scope} (limite: {reference})",
+    "ERROR_RATE_SPIKE": "Taxa de erro de {observed} em {scope}, acima da média recente de {reference}",
+    "LATENCY_SLO": "Latência p95 de {observed} em {scope} (limite: {reference})",
+    "LATENCY_SPIKE": "Latência p95 de {observed} em {scope}, acima da média recente de {reference}",
+    "VOLUME_DROP": "Volume de {observed} requisições, menos da metade da média recente ({reference})"
+  },
+  "actions": {
+    "ERROR_RATE_SLO": "Investigar os erros de {scope}, começando pela assinatura mais frequente.",
+    "ERROR_RATE_SPIKE": "Comparar os deploys e mudanças de {scope} com o dia anterior.",
+    "LATENCY_SLO": "Verificar dependências e uso de recursos de {scope}.",
+    "LATENCY_SPIKE": "Verificar se houve aumento de carga ou consulta lenta em {scope}.",
+    "VOLUME_DROP": "Confirmar se a queda de volume é esperada (feriado, manutenção) ou falha de coleta."
+  },
+  "fallback": {
+    "headline": {
+      "GREEN": "Operação estável em {date}: nenhum alerta.",
+      "YELLOW": "{date}: {count} alerta(s) de atenção, sem incidente crítico.",
+      "RED": "{date}: {count} alerta(s), incluindo nível crítico. Ação necessária."
+    },
+    "volume": "{requests} requisições, taxa de erro {errorRate} e latência p95 de {p95}.",
+    "users": "{users} usuário(s) receberam erro de servidor.",
+    "topError": "Erro mais frequente: \"{signature}\" em {service} ({count}x).",
+    "noRisks": "Nenhum risco identificado pelas regras.",
+    "noActions": "Nenhuma ação necessária."
+  },
+  "alert": {
+    "subject": "[FALHA] Pipeline de relatório: {workflow}",
+    "body": "O workflow \"{workflow}\" falhou no nó \"{node}\".\n\nMensagem: {message}\nExecução n8n: {execution}\nRegistro da falha: {id}\n\nO relatório do dia pode não ter sido enviado. Verifique a execução no n8n e rode o workflow manualmente após corrigir.",
+    "unknown": "desconhecido"
+  }
+}

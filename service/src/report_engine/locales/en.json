@@ -1,0 +1,73 @@
+{
+  "errors": {
+    "VALIDATION_FAILED": {"title": "Invalid data", "detail": "One or more fields failed validation."},
+    "UNAUTHORIZED": {"title": "Not authenticated", "detail": "Send a valid API key in the X-API-Key header."},
+    "RESOURCE_NOT_FOUND": {"title": "Resource not found", "detail": "The requested route does not exist."},
+    "INTERNAL_ERROR": {"title": "Internal error", "detail": "An unexpected error occurred. Give the correlationId to support."},
+    "REPORT_DATE_IN_FUTURE": {"title": "Date in the future", "detail": "Cannot build the report for {reportDate}, which has not happened yet."},
+    "NO_LOG_DATA": {"title": "No log data", "detail": "There are no log events for {reportDate}."},
+    "REPORT_NOT_FOUND": {"title": "Report not found", "detail": "Report {id} does not exist."},
+    "REPORT_ALREADY_DELIVERED": {"title": "Report already delivered", "detail": "The report for {reportDate} was already sent and cannot change."},
+    "REPORT_NOT_SUMMARIZED": {"title": "Report has no summary", "detail": "Report {id} needs a summary before it can be marked as delivered."},
+    "REPORT_VERSION_CONFLICT": {"title": "Version conflict", "detail": "The report was changed by another run (sent version {expected}, current {current})."},
+    "FAILURE_WORKFLOW_REQUIRED": {"title": "Workflow required", "detail": "Send the name of the workflow that failed."}
+  },
+  "report": {
+    "subject": "[{health}] {product}: daily operations report for {date}",
+    "title": "Daily operations report",
+    "health": {"GREEN": "Healthy", "YELLOW": "Attention", "RED": "Critical"},
+    "summary": "Executive summary",
+    "highlights": "Highlights",
+    "risks": "Risks",
+    "actions": "Recommended actions",
+    "kpis": "Today's indicators",
+    "requests": "Requests",
+    "errorRate": "Error rate (5xx)",
+    "p95": "p95 latency",
+    "affectedUsers": "Users hit by errors",
+    "anomalies": "Alerts",
+    "noAnomalies": "No alerts: every indicator is within its SLO.",
+    "services": "By service",
+    "service": "Service",
+    "topErrors": "Most frequent errors",
+    "occurrences": "Occurrences",
+    "error": "Error",
+    "level": {"WARNING": "Warning", "CRITICAL": "Critical"},
+    "allServices": "all services",
+    "rejected": "{count} invalid log line(s) were skipped.",
+    "footerAi": "Summary written by AI ({model}) from computed, masked metrics. Cost: US$ {cost}.",
+    "footerFallback": "Rule-based summary because the AI model did not answer. Numbers and alerts are unchanged.",
+    "footer": "Generated automatically by the ops-report-automation pipeline. Personal data is masked before sending."
+  },
+  "anomalies": {
+    "ERROR_RATE_SLO": "Error rate of {observed} on {scope} (limit: {reference})",
+    "ERROR_RATE_SPIKE": "Error rate of {observed} on {scope}, above the recent average of {reference}",
+    "LATENCY_SLO": "p95 latency of {observed} on {scope} (limit: {reference})",
+    "LATENCY_SPIKE": "p95 latency of {observed} on {scope}, above the recent average of {reference}",
+    "VOLUME_DROP": "Volume of {observed} requests, less than half the recent average ({reference})"
+  },
+  "actions": {
+    "ERROR_RATE_SLO": "Investigate the errors on {scope}, starting with the most frequent signature.",
+    "ERROR_RATE_SPIKE": "Compare deploys and changes on {scope} with the previous day.",
+    "LATENCY_SLO": "Check dependencies and resource usage on {scope}.",
+    "LATENCY_SPIKE": "Check for a load increase or a slow query on {scope}.",
+    "VOLUME_DROP": "Confirm whether the volume drop is expected (holiday, maintenance) or a collection failure."
+  },
+  "fallback": {
+    "headline": {
+      "GREEN": "Stable operation on {date}: no alerts.",
+      "YELLOW": "{date}: {count} warning alert(s), no critical incident.",
+      "RED": "{date}: {count} alert(s), including critical ones. Action required."
+    },
+    "volume": "{requests} requests, error rate {errorRate} and p95 latency of {p95}.",
+    "users": "{users} user(s) got a server error.",
+    "topError": "Most frequent error: \"{signature}\" on {service} ({count}x).",
+    "noRisks": "No risks found by the rules.",
+    "noActions": "No action needed."
+  },
+  "alert": {
+    "subject": "[FAILURE] Report pipeline: {workflow}",
+    "body": "Workflow \"{workflow}\" failed at node \"{node}\".\n\nMessage: {message}\nn8n execution: {execution}\nFailure record: {id}\n\nToday's report may not have been sent. Check the execution in n8n and run the workflow manually after fixing it.",
+    "unknown": "unknown"
+  }
+}

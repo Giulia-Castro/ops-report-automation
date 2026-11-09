@@ -1,0 +1,89 @@
+name: ops-report-automation
+
+x-n8n-env: &n8n-env
+  N8N_ENCRYPTION_KEY: ${N8N_ENCRYPTION_KEY:?set N8N_ENCRYPTION_KEY in .env}
+  GENERIC_TIMEZONE: America/Sao_Paulo
+  TZ: America/Sao_Paulo
+  N8N_DIAGNOSTICS_ENABLED: "false"
+  N8N_PERSONALIZATION_ENABLED: "false"
+  # Workflows read secrets only through encrypted credentials, never through $env.
+  N8N_BLOCK_ENV_ACCESS_IN_NODE: "true"
+  EXECUTIONS_DATA_PRUNE: "true"
+  EXECUTIONS_DATA_MAX_AGE: "336"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: reports
+      POSTGRES_USER: reports
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reports -d reports"]
+      interval: 5s
+      retries: 10
+
+  report-engine:
+    build: ./service
+    environment:
+      DATABASE_URL: postgresql+psycopg://reports:${POSTGRES_PASSWORD}@postgres:5432/reports
+      API_KEYS: n8n:${REPORT_ENGINE_API_KEY:?set REPORT_ENGINE_API_KEY in .env}
+      LOGS_DIR: /data/logs
+      REPORT_LOCALE: ${REPORT_LOCALE:-pt-BR}
+      REPORT_SENDER: ${REPORT_SENDER:-ops-reports@example.com}
+      REPORT_RECIPIENTS: ${REPORT_RECIPIENTS:-ops-team@example.com}
+      ALERT_RECIPIENTS: ${ALERT_RECIPIENTS:-ops-oncall@example.com}
+      CLAUDE_MODEL: ${CLAUDE_MODEL:-claude-opus-5-5}
+      MANUAL_REPORT_MINUTES: ${MANUAL_REPORT_MINUTES:-90}
+    volumes:
+      - ./data/logs:/data/logs:ro
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  mailpit:
+    # Local SMTP catcher: every e-mail the pipeline sends shows up at http://localhost:8025
+    image: axllent/mailpit:v1.33.1
+    ports:
+      - "127.0.0.1:8025:8025"
+
+  n8n-bootstrap:
+    image: n8nio/n8n:2.46.6
+    entrypoint: ["/bin/sh", "/bootstrap/bootstrap.sh"]
+    environment:
+      <<: *n8n-env
+      REPORT_ENGINE_API_KEY: ${REPORT_ENGINE_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      SMTP_PORT: ${SMTP_PORT:-1025}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      SMTP_SECURE: ${SMTP_SECURE:-false}
+      SMTP_DISABLE_STARTTLS: ${SMTP_DISABLE_STARTTLS:-true}
+    volumes:
+      - n8n-data:/home/node/.n8n
+      - ./n8n/init:/bootstrap:ro
+      - ./n8n/workflows:/workflows:ro
+
+  n8n:
+    image: n8nio/n8n:2.46.6
+    environment: *n8n-env
+    ports:
+      - "127.0.0.1:5678:5678"
+    volumes:
+      - n8n-data:/home/node/.n8n
+    depends_on:
+      n8n-bootstrap:
+        condition: service_completed_successfully
+      report-engine:
+        condition: service_started
+      mailpit:
+        condition: service_started
+
+volumes:
+  postgres-data:
+  n8n-data:

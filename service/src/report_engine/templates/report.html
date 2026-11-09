@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ product }} | {{ labels.title }} | {{ date }}</title>
+</head>
+<body style="margin:0;padding:24px;background:#f6f8fa;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:#1f2328;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #d0d7de;border-radius:8px;">
+  <tr>
+    <td style="padding:20px 24px;border-bottom:1px solid #d0d7de;">
+      <div style="font-size:13px;color:#59636e;">{{ product }} · {{ labels.title }}</div>
+      <div style="font-size:22px;font-weight:600;margin-top:4px;">{{ date }}
+        <span style="display:inline-block;margin-left:8px;padding:2px 10px;border-radius:12px;font-size:13px;color:#ffffff;background:{{ health_color }};">{{ health_label }}</span>
+      </div>
+    </td>
+  </tr>
+
+  {% if summary %}
+  <tr>
+    <td style="padding:20px 24px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">{{ labels.summary }}</h2>
+      <p style="font-size:15px;margin:0 0 12px;"><strong>{{ summary.headline }}</strong></p>
+      {% for title, items in [(labels.highlights, summary.highlights), (labels.risks, summary.risks), (labels.actions, summary.actions)] %}
+      <div style="font-size:13px;font-weight:600;margin-top:10px;">{{ title }}</div>
+      <ul style="margin:4px 0 0;padding-left:20px;font-size:14px;">
+        {% for item in items %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+      {% endfor %}
+    </td>
+  </tr>
+  {% endif %}
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">{{ labels.kpis }}</h2>
+      <table role="presentation" width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
+        <tr>
+          {% for name, value in kpis %}
+          <td style="border:1px solid #d0d7de;text-align:center;">
+            <div style="font-size:12px;color:#59636e;">{{ name }}</div>
+            <div style="font-size:18px;font-weight:600;">{{ value }}</div>
+          </td>
+          {% endfor %}
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">{{ labels.anomalies }}</h2>
+      {% if anomalies %}
+      <ul style="margin:0;padding-left:20px;font-size:14px;">
+        {% for level, text, code in anomalies %}
+        <li><strong style="color:{{ '#cf222e' if code == 'CRITICAL' else '#9a6700' }};">{{ level }}</strong>: {{ text }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p style="margin:0;font-size:14px;">{{ labels.noAnomalies }}</p>
+      {% endif %}
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">{{ labels.services }}</h2>
+      <table width="100%" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
+        <tr style="background:#f6f8fa;">
+          <th align="left" style="border:1px solid #d0d7de;">{{ labels.service }}</th>
+          <th align="right" style="border:1px solid #d0d7de;">{{ labels.requests }}</th>
+          <th align="right" style="border:1px solid #d0d7de;">{{ labels.errorRate }}</th>
+          <th align="right" style="border:1px solid #d0d7de;">{{ labels.p95 }}</th>
+        </tr>
+        {% for name, requests, rate, p95 in services %}
+        <tr>
+          <td style="border:1px solid #d0d7de;">{{ name }}</td>
+          <td align="right" style="border:1px solid #d0d7de;">{{ requests }}</td>
+          <td align="right" style="border:1px solid #d0d7de;">{{ rate }}</td>
+          <td align="right" style="border:1px solid #d0d7de;">{{ p95 }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </td>
+  </tr>
+
+  {% if top_errors %}
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">{{ labels.topErrors }}</h2>
+      <table width="100%" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
+        <tr style="background:#f6f8fa;">
+          <th align="left" style="border:1px solid #d0d7de;">{{ labels.service }}</th>
+          <th align="left" style="border:1px solid #d0d7de;">{{ labels.error }}</th>
+          <th align="right" style="border:1px solid #d0d7de;">{{ labels.occurrences }}</th>
+        </tr>
+        {% for service, signature, count in top_errors %}
+        <tr>
+          <td style="border:1px solid #d0d7de;">{{ service }}</td>
+          <td style="border:1px solid #d0d7de;font-family:Consolas,monospace;">{{ signature }}</td>
+          <td align="right" style="border:1px solid #d0d7de;">{{ count }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </td>
+  </tr>
+  {% endif %}
+
+  <tr>
+    <td style="padding:16px 24px;border-top:1px solid #d0d7de;font-size:12px;color:#59636e;">
+      {% if rejected_note %}<p style="margin:0 0 6px;">{{ rejected_note }}</p>{% endif %}
+      <p style="margin:0 0 6px;">{{ source_note }}</p>
+      <p style="margin:0;">{{ labels.footer }}</p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

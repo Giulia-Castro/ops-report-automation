@@ -1,0 +1,86 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  service:
+    name: Report engine (lint, tests, migrations)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: service
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: reports
+          POSTGRES_USER: reports
+          POSTGRES_PASSWORD: reports
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U reports -d reports"
+          --health-interval 5s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: service/pyproject.toml
+
+      - name: Install
+        run: pip install -e ".[dev,postgres]"
+
+      - name: Lint
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Tests (unit, integration, n8n workflow contracts; coverage >= 80%)
+        run: pytest
+
+      - name: Migrations on PostgreSQL
+        env:
+          DATABASE_URL: postgresql+psycopg://reports:reports@localhost:5432/reports
+        run: |
+          alembic upgrade head
+          alembic downgrade base
+
+  e2e:
+    name: End-to-end (Docker Compose + n8n + Mailpit)
+    needs: service
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate throwaway secrets
+        run: |
+          python - <<'EOF'
+          import secrets
+          with open(".env", "w") as env:
+              for name in ("POSTGRES_PASSWORD", "REPORT_ENGINE_API_KEY", "N8N_ENCRYPTION_KEY"):
+                  env.write(f"{name}={secrets.token_urlsafe(32)}\n")
+          EOF
+
+      - name: Start stack
+        run: docker compose up -d --build --wait --wait-timeout 300 postgres report-engine mailpit && docker compose up -d n8n
+
+      - name: Run end-to-end scenario
+        run: bash scripts/e2e.sh
+
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --tail=200
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

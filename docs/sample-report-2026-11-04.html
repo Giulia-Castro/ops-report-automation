@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orbit | RelatÃ³rio diÃ¡rio de operaÃ§Ãµes | 2026-11-04</title>
+</head>
+<body style="margin:0;padding:24px;background:#f6f8fa;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:#1f2328;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:0 auto;background:#ffffff;border:1px solid #d0d7de;border-radius:8px;">
+  <tr>
+    <td style="padding:20px 24px;border-bottom:1px solid #d0d7de;">
+      <div style="font-size:13px;color:#59636e;">Orbit Â· RelatÃ³rio diÃ¡rio de operaÃ§Ãµes</div>
+      <div style="font-size:22px;font-weight:600;margin-top:4px;">2026-11-04
+        <span style="display:inline-block;margin-left:8px;padding:2px 10px;border-radius:12px;font-size:13px;color:#ffffff;background:#cf222e;">CrÃ­tico</span>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:20px 24px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">Resumo executivo</h2>
+      <p style="font-size:15px;margin:0 0 12px;"><strong>2026-11-04: 3 alerta(s), incluindo nÃ­vel crÃ­tico. AÃ§Ã£o necessÃ¡ria.</strong></p>
+      <div style="font-size:13px;font-weight:600;margin-top:10px;">Destaques</div>
+      <ul style="margin:4px 0 0;padding-left:20px;font-size:14px;">
+<li>1.482 requisiÃ§Ãµes, taxa de erro 1,01% e latÃªncia p95 de 419 ms.</li><li>15 usuÃ¡rio(s) receberam erro de servidor.</li><li>Erro mais frequente: &#34;Payment provider timeout after # ms for invoice #&#34; em billing (14x).</li>      </ul>
+      <div style="font-size:13px;font-weight:600;margin-top:10px;">Riscos</div>
+      <ul style="margin:4px 0 0;padding-left:20px;font-size:14px;">
+<li>Taxa de erro de 6,33% em billing (limite: 1,00%)</li><li>Taxa de erro de 1,01% em todos os serviÃ§os (limite: 1,00%)</li><li>LatÃªncia p95 de 810 ms em billing (limite: 800 ms)</li>      </ul>
+      <div style="font-size:13px;font-weight:600;margin-top:10px;">AÃ§Ãµes recomendadas</div>
+      <ul style="margin:4px 0 0;padding-left:20px;font-size:14px;">
+<li>Investigar os erros de billing, comeÃ§ando pela assinatura mais frequente.</li><li>Investigar os erros de todos os serviÃ§os, comeÃ§ando pela assinatura mais frequente.</li><li>Verificar dependÃªncias e uso de recursos de billing.</li>      </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">Indicadores do dia</h2>
+      <table role="presentation" width="100%" cellpadding="8" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
+        <tr>
+          <td style="border:1px solid #d0d7de;text-align:center;">
+            <div style="font-size:12px;color:#59636e;">RequisiÃ§Ãµes</div>
+            <div style="font-size:18px;font-weight:600;">1.482</div>
+          </td>
+          <td style="border:1px solid #d0d7de;text-align:center;">
+            <div style="font-size:12px;color:#59636e;">Taxa de erro (5xx)</div>
+            <div style="font-size:18px;font-weight:600;">1,01%</div>
+          </td>
+          <td style="border:1px solid #d0d7de;text-align:center;">
+            <div style="font-size:12px;color:#59636e;">LatÃªncia p95</div>
+            <div style="font-size:18px;font-weight:600;">419 ms</div>
+          </td>
+          <td style="border:1px solid #d0d7de;text-align:center;">
+            <div style="font-size:12px;color:#59636e;">UsuÃ¡rios afetados por erro</div>
+            <div style="font-size:18px;font-weight:600;">15</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">Alertas</h2>
+      <ul style="margin:0;padding-left:20px;font-size:14px;">
+        <li><strong style="color:#cf222e;">CrÃ­tico</strong>: Taxa de erro de 6,33% em billing (limite: 1,00%)</li>
+        <li><strong style="color:#9a6700;">Aviso</strong>: Taxa de erro de 1,01% em todos os serviÃ§os (limite: 1,00%)</li>
+        <li><strong style="color:#9a6700;">Aviso</strong>: LatÃªncia p95 de 810 ms em billing (limite: 800 ms)</li>
+      </ul>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">Por serviÃ§o</h2>
+      <table width="100%" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
+        <tr style="background:#f6f8fa;">
+          <th align="left" style="border:1px solid #d0d7de;">ServiÃ§o</th>
+          <th align="right" style="border:1px solid #d0d7de;">RequisiÃ§Ãµes</th>
+          <th align="right" style="border:1px solid #d0d7de;">Taxa de erro (5xx)</th>
+          <th align="right" style="border:1px solid #d0d7de;">LatÃªncia p95</th>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">auth</td>
+          <td align="right" style="border:1px solid #d0d7de;">275</td>
+          <td align="right" style="border:1px solid #d0d7de;">0,36%</td>
+          <td align="right" style="border:1px solid #d0d7de;">142 ms</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">billing</td>
+          <td align="right" style="border:1px solid #d0d7de;">221</td>
+          <td align="right" style="border:1px solid #d0d7de;">6,33%</td>
+          <td align="right" style="border:1px solid #d0d7de;">810 ms</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">gateway</td>
+          <td align="right" style="border:1px solid #d0d7de;">432</td>
+          <td align="right" style="border:1px solid #d0d7de;">0,00%</td>
+          <td align="right" style="border:1px solid #d0d7de;">191 ms</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">notifications</td>
+          <td align="right" style="border:1px solid #d0d7de;">163</td>
+          <td align="right" style="border:1px solid #d0d7de;">0,00%</td>
+          <td align="right" style="border:1px solid #d0d7de;">320 ms</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">orders</td>
+          <td align="right" style="border:1px solid #d0d7de;">391</td>
+          <td align="right" style="border:1px solid #d0d7de;">0,00%</td>
+          <td align="right" style="border:1px solid #d0d7de;">439 ms</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:0 24px 20px;">
+      <h2 style="font-size:16px;margin:0 0 8px;">Erros mais frequentes</h2>
+      <table width="100%" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-size:13px;">
+        <tr style="background:#f6f8fa;">
+          <th align="left" style="border:1px solid #d0d7de;">ServiÃ§o</th>
+          <th align="left" style="border:1px solid #d0d7de;">Erro</th>
+          <th align="right" style="border:1px solid #d0d7de;">OcorrÃªncias</th>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">billing</td>
+          <td style="border:1px solid #d0d7de;font-family:Consolas,monospace;">Payment provider timeout after # ms for invoice #</td>
+          <td align="right" style="border:1px solid #d0d7de;">14</td>
+        </tr>
+        <tr>
+          <td style="border:1px solid #d0d7de;">auth</td>
+          <td style="border:1px solid #d0d7de;font-family:Consolas,monospace;">Token signing key not found: kid &lt;id&gt;</td>
+          <td align="right" style="border:1px solid #d0d7de;">1</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td style="padding:16px 24px;border-top:1px solid #d0d7de;font-size:12px;color:#59636e;">
+<p style="margin:0 0 6px;">1 linha(s) de log invÃ¡lida(s) foram ignoradas.</p>      <p style="margin:0 0 6px;">Resumo gerado por regras porque o modelo de IA nÃ£o respondeu. Os nÃºmeros e alertas nÃ£o mudam.</p>
+      <p style="margin:0;">Gerado automaticamente pelo pipeline ops-report-automation. Dados pessoais sÃ£o mascarados antes do envio.</p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,3 @@
+# Keep LF in the repository and on checkout (CI runs on Linux).
+* text=auto eol=lf
+*.png binary

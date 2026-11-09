@@ -1,0 +1,100 @@
+{
+  "id": "OpsErrorAlert001",
+  "name": "Pipeline failure alert",
+  "active": true,
+  "nodes": [
+    {
+      "id": "8a1e4b2c-0001-4c7d-8e11-2b9f5a6c0b01",
+      "name": "On workflow error",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [0, 100],
+      "parameters": {}
+    },
+    {
+      "id": "8a1e4b2c-0002-4c7d-8e11-2b9f5a6c0b02",
+      "name": "Record failure",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 100],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "Counts the failure (reliability metric) and returns the alert text and recipients.",
+      "parameters": {
+        "method": "POST",
+        "url": "http://report-engine:8000/v1/pipeline-failures",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ workflowName: $json.workflow?.name ?? 'unknown', nodeName: $json.execution?.lastNodeExecuted ?? null, message: $json.execution?.error?.message ?? null, executionId: $json.execution?.id ? String($json.execution.id) : null }) }}",
+        "options": { "timeout": 15000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsEngineApiKey1", "name": "Report Engine API key" }
+      }
+    },
+    {
+      "id": "8a1e4b2c-0003-4c7d-8e11-2b9f5a6c0b03",
+      "name": "Alert on-call",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [520, 0],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000,
+      "parameters": {
+        "fromEmail": "={{ $json.email.sender }}",
+        "toEmail": "={{ $json.email.recipients.join(', ') }}",
+        "subject": "={{ $json.email.subject }}",
+        "emailFormat": "text",
+        "text": "={{ $json.email.text }}",
+        "options": { "appendAttribution": false }
+      },
+      "credentials": {
+        "smtp": { "id": "OpsSmtpServer001", "name": "SMTP server" }
+      }
+    },
+    {
+      "id": "8a1e4b2c-0004-4c7d-8e11-2b9f5a6c0b04",
+      "name": "Alert on-call (engine down)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [520, 200],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000,
+      "notes": "Fallback when the report engine itself is unreachable. Change the address for your team.",
+      "parameters": {
+        "fromEmail": "ops-reports@example.com",
+        "toEmail": "ops-oncall@example.com",
+        "subject": "[FAILURE] Report pipeline and report engine unreachable",
+        "emailFormat": "text",
+        "text": "=The daily report pipeline failed and the report engine did not answer.\n\nWorkflow: {{ $('On workflow error').first().json.workflow?.name }}\nn8n execution: {{ $('On workflow error').first().json.execution?.id }}\n\nCheck the report-engine container and its database first.",
+        "options": { "appendAttribution": false }
+      },
+      "credentials": {
+        "smtp": { "id": "OpsSmtpServer001", "name": "SMTP server" }
+      }
+    }
+  ],
+  "connections": {
+    "On workflow error": {
+      "main": [[{ "node": "Record failure", "type": "main", "index": 0 }]]
+    },
+    "Record failure": {
+      "main": [
+        [{ "node": "Alert on-call", "type": "main", "index": 0 }],
+        [{ "node": "Alert on-call (engine down)", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo"
+  },
+  "pinData": {},
+  "tags": []
+}

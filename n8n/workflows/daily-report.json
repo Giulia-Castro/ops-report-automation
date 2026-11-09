@@ -1,0 +1,191 @@
+{
+  "id": "OpsDailyReport01",
+  "name": "Daily ops report",
+  "active": true,
+  "nodes": [
+    {
+      "id": "6f7d2c1e-0001-4a51-9a3a-6c2f1b9d0a01",
+      "name": "Every day 07:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 7 * * *" }]
+        }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0002-4a51-9a3a-6c2f1b9d0a02",
+      "name": "On demand (webhook)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 200],
+      "webhookId": "0b6f3c9e-7a51-4d8e-9f20-3d1c5e7a9b10",
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "daily-report",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsEngineApiKey1", "name": "Report Engine API key" }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0003-4a51-9a3a-6c2f1b9d0a03",
+      "name": "Build report",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 100],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "notes": "Service reads the day's CSV, computes metrics and anomalies, returns the Claude request body.",
+      "parameters": {
+        "method": "POST",
+        "url": "http://report-engine:8000/v1/reports",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ reportDate: $json.body?.reportDate ?? null }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsEngineApiKey1", "name": "Report Engine API key" }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0004-4a51-9a3a-6c2f1b9d0a04",
+      "name": "Claude: write summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 100],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "onError": "continueErrorOutput",
+      "notes": "Body is built and versioned by the service. On any error the flow continues and the service writes a rule-based summary.",
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [{ "name": "anthropic-version", "value": "2026-10-21" }]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.llmRequest) }}",
+        "options": { "timeout": 120000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsAnthropicKey1", "name": "Anthropic API key" }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0005-4a51-9a3a-6c2f1b9d0a05",
+      "name": "Attach summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [800, 100],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "notes": "Validates Claude's JSON (or falls back to rules) and renders the e-mail.",
+      "parameters": {
+        "method": "POST",
+        "url": "=http://report-engine:8000/v1/reports/{{ $('Build report').first().json.id }}/summary",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ version: $('Build report').first().json.version, llmResponse: $json.type === 'message' ? $json : null }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsEngineApiKey1", "name": "Report Engine API key" }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0006-4a51-9a3a-6c2f1b9d0a06",
+      "name": "Send e-mail",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [1060, 100],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 10000,
+      "parameters": {
+        "fromEmail": "={{ $json.email.sender }}",
+        "toEmail": "={{ $json.email.recipients.join(', ') }}",
+        "subject": "={{ $json.email.subject }}",
+        "emailFormat": "both",
+        "text": "={{ $json.email.text }}",
+        "html": "={{ $json.email.html }}",
+        "options": { "appendAttribution": false }
+      },
+      "credentials": {
+        "smtp": { "id": "OpsSmtpServer001", "name": "SMTP server" }
+      }
+    },
+    {
+      "id": "6f7d2c1e-0007-4a51-9a3a-6c2f1b9d0a07",
+      "name": "Mark delivered",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, 100],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "notes": "Records delivery time. Feeds the hours-saved and reliability metrics.",
+      "parameters": {
+        "method": "POST",
+        "url": "=http://report-engine:8000/v1/reports/{{ $('Build report').first().json.id }}/delivery",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ version: $('Attach summary').first().json.report.version }) }}",
+        "options": { "timeout": 30000 }
+      },
+      "credentials": {
+        "httpHeaderAuth": { "id": "OpsEngineApiKey1", "name": "Report Engine API key" }
+      }
+    }
+  ],
+  "connections": {
+    "Every day 07:00": {
+      "main": [[{ "node": "Build report", "type": "main", "index": 0 }]]
+    },
+    "On demand (webhook)": {
+      "main": [[{ "node": "Build report", "type": "main", "index": 0 }]]
+    },
+    "Build report": {
+      "main": [[{ "node": "Claude: write summary", "type": "main", "index": 0 }]]
+    },
+    "Claude: write summary": {
+      "main": [
+        [{ "node": "Attach summary", "type": "main", "index": 0 }],
+        [{ "node": "Attach summary", "type": "main", "index": 0 }]
+      ]
+    },
+    "Attach summary": {
+      "main": [[{ "node": "Send e-mail", "type": "main", "index": 0 }]]
+    },
+    "Send e-mail": {
+      "main": [[{ "node": "Mark delivered", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo",
+    "errorWorkflow": "OpsErrorAlert001",
+    "saveManualExecutions": true
+  },
+  "pinData": {},
+  "tags": []
+}
