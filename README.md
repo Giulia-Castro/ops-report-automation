@@ -14,6 +14,12 @@ recebe um alerta.
 > SLO e contra a média dos últimos 7 dias → resumo por IA (ou por regras, se a IA falhar) →
 > e-mail HTML → registro de entrega e métricas de resultado.
 
+<p align="center">
+  <img src="docs/email-report.png" alt="E-mail do relatório diário no dia do incidente de billing: status crítico, resumo executivo, alertas, indicadores por serviço e erros mais frequentes" width="620">
+  <br>
+  <sub>E-mail gerado pelo pipeline no dia do incidente simulado (04/11): billing com 6,33% de erro.</sub>
+</p>
+
 ---
 
 ## O problema
@@ -175,7 +181,7 @@ bash scripts/backfill.sh 2026-10-30 2026-11-07
 | API do serviço (Swagger) | http://localhost:8000/docs |
 | Métricas de resultado | `GET http://localhost:8000/v1/metrics/summary` com `X-API-Key` |
 
-Um exemplo do e-mail gerado no dia do incidente está em
+O HTML do e-mail mostrado no topo está em
 [`docs/sample-report-2026-11-04.html`](docs/sample-report-2026-11-04.html).
 
 ### Com o Claude
